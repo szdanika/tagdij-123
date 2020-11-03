@@ -1,0 +1,96 @@
+1, SELECT nev 
+FROM ugyfel
+ORDER BY nev ASC;
+
+2,SELECT *
+FROM ugyfel
+ORDER BY szulev DESC;
+
+4,SELECT SUM(osszeg)
+FROM befiz;
+
+5,SELECT AVG(osszeg)
+FROM befiz;
+
+6,SELECT MIN(osszeg), MAX(osszeg)
+FROM befiz;
+
+7,SELECT COUNT(osszeg)
+FROM befiz;
+
+8,SELECT befiz.datum, befiz.osszeg
+FROM befiz, ugyfel
+WHERE ugyfel.nev LIKE 'Török Bálint' AND befiz.azon LIKE ugyfel.azon;
+
+9,SELECT SUM(osszeg)
+FROM befiz, ugyfel
+WHERE ugyfel.nev LIKE 'Nagy Károly' AND befiz.azon LIKE ugyfel.azon;
+
+10,SELECT SUM(osszeg)
+FROM befiz, ugyfel
+WHERE ugyfel.orsz NOT LIKE 'H' AND befiz.azon LIKE ugyfel.azon;
+
+11,SELECT nev , SUM(osszeg)
+FROM befiz, ugyfel
+WHERE befiz.azon LIKE ugyfel.azon 
+GROUP BY nev;
+
+12,SELECT nev ,SUM(osszeg)
+FROM ugyfel, befiz
+WHERE ugyfel.azon = befiz.azon
+GROUP BY nev
+ORDER BY SUM(osszeg)
+LIMIT 3
+
+13,SELECT MONTH(datum) AS ho, sum(osszeg)
+FROM befiz
+GROUP BY ho
+
+
+14,SELECT COUNT(DATE(datum)) AS db, date(datum)
+FROM befiz
+GROUP BY DATE(datum)
+HAVING db >1
+
+15,SELECT datum
+FROM befiz
+WHERE DATEDIFF( NOW() , datum)> 365;
+
+16,SELECT SUM(osszeg)
+FROM befiz
+WHERE DATEDIFF( NOW() , datum) < 365;
+
+17,SELECT nev, MIN(ugyfel.szulev)
+FROM ugyfel;
+
+18;SELECT nev, datum, MIN(osszeg)
+FROM befiz, ugyfel
+WHERE befiz.azon = ugyfel.azon;
+
+19,SELECT nev, SUM(osszeg)
+FROM befiz, ugyfel
+WHERE befiz.azon = ugyfel.azon
+GROUP BY nev
+ORDER BY SUM(osszeg)
+LIMIT 1;
+
+20,SELECT nev 
+FROM ugyfel
+WHERE azon NOT IN (SELECT azon from befiz);
+
+21;SELECT nev, AVG(befiz.osszeg) 
+FROM ugyfel,befiz
+WHERE ugyfel.azon = befiz.azon
+GROUP BY nev
+
+22,SELECT nev, AVG(befiz.osszeg) 
+FROM ugyfel,befiz
+WHERE ugyfel.azon = befiz.azon OR ugyfel.azon NOT IN (SELECT azon from befiz)
+GROUP BY nev
+
+23,SELECT nev, SUM(osszeg) AS ossz
+FROM ugyfel, befiz
+WHERE ugyfel.azon = befiz.azon
+GROUP BY befiz.azon
+HAVING ossz > (SELECT SUM(osszeg)/COUNT(DISTINCT azon) FROM befiz)
+ORDER BY 2 DESC;
